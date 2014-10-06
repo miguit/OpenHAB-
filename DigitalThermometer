@@ -19,12 +19,41 @@ void setup() {
 }
 
 void loop(void) {
+  String stringOut ="OUT ";
+    String stringLiv ="O ";
+    String stringOff ="T ";
+    const byte degreeSymbol = B11011111;
+    String stringVali =" ";
+
+    showSymbol(degreeSymbol, "degrees");
+
   // set the cursor to column 0, line 1
   // (note: line 1 is the second row, since counting begins with 0):
   lcd.setCursor(0, 1);
   sensors.requestTemperatures(); // Send the command to get temperatures
-  Serial.println("DONE");
-  Serial.print("Temperature for Device 1 is: ");
-  lcd.print(sensors.getTempCByIndex(0));
+
+  lcd.print(stringOut + sensors.getTempCByIndex(0));
+  lcd.setCursor(0, 0);
+  lcd.print(stringLiv + sensors.getTempCByIndex(1));
+  lcd.setCursor(8, 0); 
+  lcd.print(stringOff + sensors.getTempCByIndex(2));
+
+ 
+
   Serial.print(sensors.getTempCByIndex(0)); 
+  Serial.print(stringVali);
+  Serial.print(sensors.getTempCByIndex(1)); 
+  Serial.print(stringVali);
+  Serial.print(sensors.getTempCByIndex(2)); 
+  Serial.println(stringVali);
+
+}
+void showSymbol( byte symbol, char * description)
+{
+  lcd.setCursor(7, 0); 
+  lcd.write(symbol);
+  lcd.setCursor(10, 1); 
+  lcd.write(symbol);
+  lcd.setCursor(15, 0); 
+  lcd.write(symbol);
 }
