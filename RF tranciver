@@ -20,18 +20,20 @@ void setup() {
 
 void loop() {
 
-float h = dht.readHumidity();
-// Read temperature as Celsius
-float t = dht.readTemperature();
-
+  float h = dht.readHumidity();
+  // Read temperature as Celsius
+  float t = dht.readTemperature();
+  char id[9] = "Sensor1|";
+  
   if (isnan(h) || isnan(t)) {
     Serial.println("Failed to read from DHT sensor!");
     return;
   }
   dtostrf(t, 6, 2, msg);
-  Serial.print(msg);
+  strcat(id,msg);
+  Serial.print(id);
   Serial.print("\n");
-  vw_send((uint8_t *)msg, strlen(msg));
+  vw_send((uint8_t *)id, strlen(id));
 
   vw_wait_tx();
 
