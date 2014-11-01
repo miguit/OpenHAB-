@@ -7,7 +7,8 @@
 
 DHT dht(DHTPIN, DHTTYPE);
 
-char msg[6];
+char temp[6];
+char hum[6];
 
 void setup() {
 
@@ -24,13 +25,19 @@ void loop() {
   // Read temperature as Celsius
   float t = dht.readTemperature();
   char id[9] = "Sensor1|";
+  char mark[2] ="|";
   
   if (isnan(h) || isnan(t)) {
     Serial.println("Failed to read from DHT sensor!");
     return;
   }
-  dtostrf(t, 6, 2, msg);
-  strcat(id,msg);
+  dtostrf(t, 5, 2, temp);
+  dtostrf(h, 5, 2, hum);
+  strcat(id,temp);
+  strcat(id,mark);
+  strcat(id,hum);
+  strcat(id,mark);
+  
   Serial.print(id);
   Serial.print("\n");
   vw_send((uint8_t *)id, strlen(id));
