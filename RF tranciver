@@ -1,0 +1,40 @@
+#include <VirtualWire.h>
+#include "DHT.h"
+
+#define DHTPIN 7     // what pin we're connected to
+//#define ONE_WIRE_BUS 2
+#define DHTTYPE DHT11   // DHT 11
+
+DHT dht(DHTPIN, DHTTYPE);
+
+char msg[6];
+
+void setup() {
+
+  Serial.begin(9600);
+  vw_setup(2000);
+  vw_set_tx_pin(3);
+  dht.begin();
+
+}
+
+void loop() {
+
+float h = dht.readHumidity();
+// Read temperature as Celsius
+float t = dht.readTemperature();
+
+  if (isnan(h) || isnan(t)) {
+    Serial.println("Failed to read from DHT sensor!");
+    return;
+  }
+  dtostrf(t, 6, 2, msg);
+  Serial.print(msg);
+  Serial.print("\n");
+  vw_send((uint8_t *)msg, strlen(msg));
+
+  vw_wait_tx();
+
+  delay(200);
+
+}
